@@ -3,5 +3,5 @@
 * Víctor Hugo Ortega gómez  
 * 1532342  
 
-Este directorio contiene los codigos de los clientes y un servidor HTTP.
+Este directorio contiene los códigos donde se implementa los programas cliente y servidor del protocolo HTTP
 
