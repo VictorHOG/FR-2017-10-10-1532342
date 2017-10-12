@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
-
+import os
 import sys
 import itertools
 import socket
 from socket import socket as Socket
+
 
 # A simple web server
 
@@ -52,9 +53,11 @@ def main():
 
          cs = ss.accept()[0] 
          request = cs.recv(1024).decode('ascii')
+	 print ("------------------------")
 	 print (request)
+	 print ("------------------------")
          reply = http_handle(request)
-         cs.send(reply.encode('ascii'))
+         cs.send(reply)
 
 
          print("\n\nReceived request")
@@ -67,7 +70,8 @@ def main():
          print("======================")
          print(reply.rstrip())
          print("======================")
-
+	
+	 cs.close()
 
     return 0
 
@@ -83,7 +87,27 @@ def http_handle(request_string):
 
     request_method = request_string.split(' ')[0]
     print ("Method: ", request_method)
-    print ("Request body: ", request_string)
+
+    request = request_string.split(' ')[1]
+    print ("request: ", request) 
+    resource = request.split('/')[1]
+    print ("resource: ", resource)
+
+   # print ("\n phat \n" ,os.path)
+
+    Ruta = os.getcwd() + request;
+
+    print (" rut -.- ",Ruta);
+
+ #   with open(resource) as myfile:
+ #   	data = myfile.read()
+    myfile = open(resource, 'r')
+    data = myfile.read()
+
+    headers = "HTTP/1.1 200 OK\n" + "Content-Type: text/html\n" + "Connection: close\n" + "\n"
+
+    answer = headers + data
+    return answer
 
 
     # Fill in the code to handle the http request here. You will probably want
