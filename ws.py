@@ -90,25 +90,59 @@ def http_handle(request_string):
 
     request = request_string.split(' ')[1]
     print ("request: ", request) 
+
+    if request == "/":
+	request = "/index.html"
+
     resource = request.split('/')[1]
     print ("resource: ", resource)
 
-   # print ("\n phat \n" ,os.path)
+    try:
+	sendReply = False
+	File_format = resource.split('.')[1]
+	print(File_format);
 
-    Ruta = os.getcwd() + request;
+	if File_format == 'html':
+		mimetype='text/html'
+		sendReply = True
 
-    print (" rut -.- ",Ruta);
+	if File_format == 'jpg':
+		mimetype='image/jpg'
+		sendReply = True
 
- #   with open(resource) as myfile:
- #   	data = myfile.read()
-    myfile = open(resource, 'r')
-    data = myfile.read()
+	if File_format == 'gif':
+		mimetype='image/gif'
+		sendReply = True
 
-    headers = "HTTP/1.1 200 OK\n" + "Content-Type: text/html\n" + "Connection: close\n" + "\n"
+	if File_format == 'js':
+		mimetype='application/javascript'
+		sendReply = True
 
-    answer = headers + data
-    return answer
+	if File_format == 'css':
+		mimetype='text/css'
+		sendReply = True
 
+	if sendReply == True:
+    		with open(resource) as myfile:
+    			data = myfile.read()
+
+    		headers = "HTTP/1.1 200 OK\n" + "Content-Type:" + mimetype + "\n" + "Connection: close\n" + "\n"
+
+    		answer = headers + data
+		myfile.close()
+    		return answer
+
+    except IOError:
+	print("Error")
+	
+	with open("404NotFound.html") as myfile:
+    		data = myfile.read()
+
+	headers = "HTTP/1.1 404 Error\n" + "Content-Type: text/html\n" + "Connection: close\n" + "\n"
+
+    	answer = headers + data
+	myfile.close()
+    	return answer
 
     # Fill in the code to handle the http request here. You will probably want
     # to write additional functions to parse the http request into a nicer data
@@ -123,11 +157,6 @@ def http_handle(request_string):
     #                                           archivos ademas del HTML
     # - https://goo.gl/i7hJYP, muestra como construir un mensaje de respuesta
     #                          correcto en HTTP
-
-	
-	
-
-
 
 if __name__ == "__main__":
     sys.exit(main())
